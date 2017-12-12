@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <script src="bootstrap/js/jquery-1.10.1.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/lib/layer/layer.js"></script>
+    <link rel="stylesheet" href="/lib/layer/theme/default/layer.css">
+    <link rel="stylesheet" href="/stylesheets/writeBlog.css">
+    <script type="text/javascript" src="/javascripts/xheditor/xheditor-1.2.2.min.js"></script>
+	<script type="text/javascript" src="/javascripts/xheditor/xheditor_lang/zh-cn.js"></script>
+    <title>写博文</title>
+</head>
+<body>
+        <header>
+            <div class="jumbotron head">
+                    <h1>Blog Administration</h1>
+                    <ul class="nav nav-pills">
+                        <li role="presentation" ><a href="/">首页</a></li>
+                        <li role="presentation" class="active"><a href="/writeBlog">写博文</a></li>
+                        <li role="presentation"><a href="/blogManage">博文管理</a></li>
+                        <div class="row">
+                                <div class="col-xs-3">
+                                    <%if(username){%>
+                                        <span>欢迎你：<b><%= username%></b></span>
+                                        <a href="/layout" class="btn btn-default">退出</a>
+                                    <%}else{%>
+                                        <a href="/login" class="btn btn-default">登录</a>
+                                        <a href="/register" class="btn btn-default">注册</a>
+                                    <%}%>
+                                    
+                                </div>
+                        </div>
+                    </ul>
+            </div>
+        </header>
+        <div class="main">
+            <div class="main-body">
+                <h3 >写博文</h3>
+                <div class="write-blog">
+                    <form>
+                        <div >
+                            <p>
+                                <span>标题:</span><input type="text" id="title" name="title" />
+                            </p>
+                            <!-- <p>
+                                <span> 上传图片:</span><input type="file" id="img" name="img">
+                            </p>  -->
+                            <div class="textarea-blog">
+                                <span>内容:</span>
+                                <textarea name="content" id="content" cols="20" rows="10"  ></textarea>
+                            </div>
+                            <p >
+                                <input type="button" id="submit-btn" value="修改" class="btn btn-default" />
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <%- include("footer")%>    
+    </body>
+</html>
+
+<script type="text/javascript">
+    $(pageInit);
+    //  comment.ejs  /comment/index
+    function pageInit(){
+        $.extend(XHEDITOR.settings,{shortcuts:{"ctrl+enter":submitForm}});
+        $("#content").xheditor({   //初始化 富文件编辑框
+            html5Upload:false,
+            upMultiple:"1",
+
+            upLinkRrl:"upload.html",
+            upLinkExt:"zip,rar,txt",
+
+            upImgUrl:"/users/uploadImg",
+            upImgExt:"jpg,jpeg,gif,png",
+
+            upFlashUrl:"upload.php",
+            upFlashExt:"swf",
+
+            upMediaUrl:"upload.php",
+            upMediaExt:"wmv,avi,wma,mp3,mid"
+
+        });
+    };
+
+    function insertUpload(arrMsg){
+        console.log(arrMsg);
+        var i,msg;
+        for(var i=0;i<arrMsg.length;i++){
+            msg=arrMsg[i];
+            console.log(msg);
+            $("#uploadList").append('<option value="'+msg.id+'">'+msg.localname+'</option>')
+        }
+    };
+
+    function submitForm(){
+        $("#frmDemo").submit();
+    }
+
+
+
+    //修改
+   //获得地址栏？号后的内容信息
+    var url = window.location.search;
+    var loc = url.substring(url.lastIndexOf('=')+1, url.length);
+    $.get('/findarticle?id='+loc,function(data){
+        console.log(data);
+        $("#title").val(data.title);
+        $("#content").val(data.content);
+    })
+    $("#submit-btn").click(function(){
+        var title_new=$("#title").val();
+        var content_new=$("#content").val();
+        console.log(title_new,content_new);
+        $.post("/users/updateSubnitArticle",{title:title_new,content:content_new,id:loc},
+            function(data){
+                console.log(data);
+                if(data=="true"){
+                    layer.msg("修改成功！",{icon:1});
+                    setTimeout(function(){
+                        location.href="/blogManage";
+                    },1000)
+                }
+                if(data=="false"){
+                    layer.alert("你还没有登录，请登录！")
+                }
+            }
+        )
+    })
+</script>

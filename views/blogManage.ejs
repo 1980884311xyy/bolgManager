@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <script src="bootstrap/js/jquery-1.10.1.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/lib/layer/layer.js"></script>
+    <link rel="stylesheet" href="/lib/layer/theme/default/layer.css">
+    <link rel="stylesheet" href="/stylesheets/blogManage.css">
+    <title>注册</title>
+</head>
+<body>
+        <header>
+            <div class="jumbotron head">
+                    <h1>Blog Administration</h1>
+                    <ul class="nav nav-pills">
+                        <li role="presentation" ><a href="/">首页</a></li>
+                        <li role="presentation" ><a href="/writeBlog">写博文</a></li>
+                        <li role="presentation" class="active"><a href="/blogManage">博文管理</a></li>
+                        <div class="row">
+                                <div class="col-xs-3">
+                                    <%if(username){%>
+                                        <span>欢迎你：<b id="username"><%= username%></b></span>
+                                        <a href="/layout" class="btn btn-default">退出</a>
+                                    <%}else{%>
+                                        <a href="/login" class="btn btn-default">登录</a>
+                                        <a href="/register" class="btn btn-default">注册</a>
+                                    <%}%>
+                                    
+                                </div>
+                        </div>
+                    </ul>
+            </div>
+        </header>
+        <div class="main">
+            <div class="main-body">
+                    <div class="yingyin">
+                        <table class="table table-striped">
+                        <thead>
+                                <tr class="">
+                                        <td height="60" >序号</td>
+                                        <td>文章标题</td>
+                                        <td>作者</td>
+                                        <td>发布日期</td>
+                                        <td>操作</td>
+                                    </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                            
+                                <!-- <tr data-id="">
+                                    <td width="10%" height="60px"></td>
+                                    <td width="20%"><a href="/articleDetail?ids="></a></td>
+                                    <td width="20%"></td>
+                                    <td width="25%"></td>
+                                    <td width="20%"><a href="##">更改</a><a href="##">删除</a></td>
+                                </tr>  -->
+                              
+                            </table>
+                            <div class="page">
+                                    <div value="1 0"></div> 
+                                    <div id="page" class="page_div"></div>
+                            </div>
+                        </div>
+        
+                 </div>
+            </div>
+        <%- include("footer")%>    
+    </body>
+</html>
+<script type="text/javascript" src="/lib/Paging/js/paging.js"></script>
+<script>
+//分页
+//得到数据的总长度
+var count=0;
+ $.get("/blogManagePage?num=1",function(data){
+    // console.log(data.result);
+    // console.log(data.result.length)
+    $("#page").paging({
+        pageNo:1,
+    })
+    var str='';
+    for(var i=0;i<data.result.length;i++){
+        str+='<tr data-id="'+data.result[i].id+'">'+
+                '<td width="10%" height="60px">'+(i+1)+'</td>'+
+                '<td width="20%"><a href="/articleDetail?ids='+data.result[i].id+'">'+data.result[i].title+'</a></td>'+
+                '<td width="20%">'+data.result[i].author+'</td>'+
+                '<td width="25%">'+data.result[i].data+'</td>'+
+                '<td width="20%"><a href="javascript:void(0);" class="update">更改</a><a href="javascript:void(0);" class="delete">删除</a></td>'+
+            '</tr>'
+        }
+        $("table tbody").html(str);
+        
+        // $("#page a").eq(2).addClass("current");
+    })
+ 
+
+$.get("/blogCount",function(data){
+        count=data.length;
+        $("#page").paging({
+        pageNo:1,
+        totalPage:Math.ceil(count/10),
+        totalSize: count,
+        callback:function(num){
+            // alert(num);
+            $.get("/blogManagePage",{num:num},function(data){
+                // console.log(data.result);
+                // console.log(data.result.length)
+                var str='';
+                for(var i=0;i<data.result.length;i++){
+                    str+='<tr data-id="'+data.result[i].id+'">'+
+                            '<td width="10%" height="60px">'+(i+1)+'</td>'+
+                            '<td width="20%"><a href="/articleDetail?ids='+data.result[i].id+'">'+data.result[i].title+'</a></td>'+
+                            '<td width="20%">'+data.result[i].author+'</td>'+
+                            '<td width="25%">'+data.result[i].data+'</td>'+
+                            '<td width="20%"><a href="javascript:void(0);" class="update">更改</a><a href="javascript:void(0);" class="delete">删除</a></td>'+
+                        '</tr>'
+                 }
+                 $("table tbody").html(str);
+            })
+            deleterFn();
+            updateFn()
+        }
+    }) 
+})
+var firstPage=$("#firstPage");
+    console.log($("#page a"))
+    
+    $("#page").on("click","a",function(){
+        $("#page a").eq(2).addClass("current");
+        $(this).addClass("current").siblings().removeClass("current");
+    })
+
+//删除
+deleterFn();
+function deleterFn(){
+    setTimeout(function(){
+        $("table tr >td").on("click",".delete",function(){
+            var username=$("#username").html();
+            var id=$(this).parent().parent().attr("data-id");
+            console.log(id)
+            console.log(username);
+            var _this=$(this);
+            if(username){
+                    layer.confirm("你确定要删除吗？",function(){
+                    layer.closeAll('dialog');
+                    //请求数据库
+                    $.get('/users/articledelete?id='+id+'',function(data){
+                        console.log(data);
+                        if(data=="true"){
+                            layer.msg("删除成功！",{icon:1});
+                            // _this.parent().parent().remove();
+                            window.location.reload();
+                        }else{
+                            layer.alert("你不是该作者，不能删除！",{icon:5});
+                        }
+                    }) 
+                })
+            }else{
+                layer.alert("你还没有登录，请先登录",{icon:2});
+            }
+        }) 
+    },300)
+}
+
+//更改
+updateFn()
+function updateFn(){
+    setTimeout(function(){
+        $("table tr >td").on("click",".update",function(){
+            var username=$("#username").html();
+            var id=$(this).parent().parent().attr("data-id");
+            console.log(id)
+            console.log(username);
+            var _this=$(this);
+            if(username){
+                    //请求数据库
+                     $.get('/users/articledeleteModify?id='+id+'',function(data){
+                        console.log(data);
+                         if(typeof(data)=='object'){
+                            //  layer.msg("可以修改！",{icon:1});
+                            var title=data.title;
+                            var content=data.content;
+                            window.location.href="/updatearticle?id="+id;
+                        }else{
+                            layer.alert("你不是该作者，不能修改文章！",{icon:5});
+                        } 
+                    })  
+            }else{
+                layer.alert("你还没有登录，请先登录",{icon:2});
+            }
+        }) 
+    },300)
+}
+
+   
+</script>

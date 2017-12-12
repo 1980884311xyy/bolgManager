@@ -1,0 +1,85 @@
+
+.main-body h3{
+    margin-left:30px !important;
+    width: 200px;
+    height: 45px;
+    background: rgb(102, 144, 160);
+    border-top-right-radius: 22px;
+    border-bottom-right-radius: 22px;
+    color: white;
+    font-size: 20px;
+    line-height: 45px;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    box-shadow: 0 1px 6px 1px rgb(12, 11, 11);
+}
+.main-body form{
+    width:90%;
+    min-height: 500px;
+    background: #E7EDF0;
+    margin:0 auto;
+    box-shadow: 0px -1px 10px 3px rgb(219, 213, 213);
+    margin-bottom: 20px;
+}
+.main-body form>div{
+    margin-left:200px;
+    overflow: hidden;
+}
+.main-body form>div p:nth-child(1){
+    margin-top:20px;
+    font-size: 20px;
+}
+.main-body form>div p:nth-child(1) input{
+    margin-left:10px;
+    width:300px;
+    height:40px;
+    font-size: 20px;
+}
+.main-body form>div p:nth-child(2){
+    margin-top:20px;
+    font-size: 20px;
+    height:50px;
+}
+/* .main-body form>div p:nth-child(2) >span{float: left;}
+.main-body form>div p:nth-child(2) >input{
+    margin-left:10px;
+    width:200px;
+    height:40px;
+    font-size: 16px;
+    float: left;
+} */
+.main-body form>div .textarea-blog{
+    margin-top:10px;
+    height:350px;
+}
+.main-body form>div .textarea-blog textarea{
+    width:600px;
+    height:300px;
+    margin-left:10px;
+    font-size: 18px;
+  }
+  .main-body form>div .textarea-blog span{
+    float: left;
+    font-size: 20px;
+  }
+  .main-body form>div p:nth-child(3){
+      margin-left:100px;
+      margin-top:10px;
+  }
+  .main-body form>div p:nth-child(3) input{
+      width:80px;
+      height:40px;
+      background: rgb(102, 144, 160);
+      color: white;
+      margin-right: 20px;
+  }
+  .main-body form>div .textarea-blog >#xhe0_container{margin-left:10px;}
+
+ .blog-list img{
+     display: none !important;
+ }
+ 
+
+
+

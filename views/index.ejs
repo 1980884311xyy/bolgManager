@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>首页</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <script src="bootstrap/js/jquery-1.10.1.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <header>
+        <div class="jumbotron head">
+            <h1>Blog Administration</h1>
+            <ul class="nav nav-pills">
+                <li role="presentation" class="active"><a href="/">首页</a></li>
+                <li role="presentation" ><a href="/writeBlog">写博文</a></li>
+                <li role="presentation"><a href="/blogManage">博文管理</a></li>
+                <div class="row">
+                        <div class="col-xs-3">
+                            <%if(username){%>
+                                <span>欢迎你:<b><%= username%></b></span>
+                                <a href="/layout" class="btn btn-default">退出</a>
+                            <%}else{%>
+                                <a href="/login" class="btn btn-default">登录</a>
+                                <a href="/register" class="btn btn-default">注册</a>
+                            <%}%>
+                            
+                        </div>
+                </div>
+            </ul>
+        </div>
+    </header>
+    <div class="main">
+      <div class="main-body">
+        <div class="yingyin">
+          <div class="nav-navgator">最新博文</div>
+          <div class="blog-content">
+                <% result.forEach((item,index)=>{%>
+                  <dl id="<%= item.id%>">
+                      <h4><%= item.title %></h4>
+                      <%if(item.img){%>
+                        <dt><img src="<%= item.img%>" alt=""></dt>
+                      <%}else{%>
+                        <dt><img src="/images/default.jpg" alt=""></dt>
+                      <%}%>
+                      <dd>
+                        <div class="blog-list"><%- item.content%></div>
+                        <p>发表日期：<%= item.data %> <a href="/articleDetail?ids=<%= item.id%>" >阅读全文</a></p>
+                      </dd>
+                    </dl>
+                <% })%>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%- include("footer")%>
+  </body>
+</html>
+<script type="text/javascript">
+  $(function(){
+    $(".blog-list img").css("display","none");
+  })
+</script>

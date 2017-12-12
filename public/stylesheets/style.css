@@ -1,0 +1,181 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+html,body,div,header,footer,p,h1,h2,h3,h4,h5,h6,ul,li,dl,dd,dt,table,th,tr,td,
+form,fieldset,main{margin: 0;padding: 0;box-sizing: border-box  }
+a { color: rgb(10, 157, 202);}
+ul li{list-style: none;}
+
+html { overflow-x: hidden; overflow-y: auto; }
+html,body{width:100%;}
+body{
+  background: url(/images/bg.jpg) repeat center center,url(/images/bg13.png) repeat center center;
+ /*  background: url(/images/bodybg.jpg) no-repeat;*/
+  /* background-size: 100% 100%;  */
+}
+header{
+  width:100%;
+  height:250px;
+  margin: 0 auto;
+}
+header .head{
+  height:250px;
+  background:url(/images/hua2.png) repeat-x left -30px,url(/images/panzi2.png) no-repeat right 50px;
+}
+header .head h1{
+  margin-left:150px;
+  margin-top:20px;
+  color: rgb(252, 246, 246);
+  font-weight: 900;
+  text-shadow: 6px -2px 7px rgb(39, 37, 37);
+}
+header .head>ul{
+  margin-top:30px;
+  margin-left:150px;
+} 
+header .head>ul li{
+  margin-right: 5px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #faf2f2;
+  box-shadow: 5px -2px 7px 0px rgb(54, 53, 53);
+  background: rgb(243, 241, 238);
+}
+
+header .head>ul>.row>.col-xs-3{
+  float: right;
+  margin-right: 120px;
+}
+header .head>ul>.row>.col-xs-3 a{
+  box-shadow: 5px -2px 7px 0px rgb(54, 53, 53);
+  border: 0;
+  margin-left:30px;
+  color: rgb(40, 149, 233);
+}
+header .head>ul>.row>.col-xs-3 span {
+  font-size: 16px;
+  color: rgb(241, 239, 234);
+}
+
+
+.main{
+  width:100%;
+  min-height: 400px;
+  background: url(/images/bg13.png);
+}
+.main .main-body{
+  padding:20px;
+  width:85%;
+  height:100%;
+  background:  #AAB4BD;
+  border-radius: 5px;
+  box-shadow: 0 -1px 5px 2px rgb(117, 116, 116);
+  margin: 0 auto;
+  overflow: hidden;
+  min-height: 400px;
+  background: url(/images/bg13.png);
+}
+.main .main-body .yingyin{
+  width:100%;
+  height:100%;
+  /* background: rgb(234, 253, 251); */
+  margin:auto;
+  border-radius: 10px;
+  box-shadow: 0 -1px 10px 2px rgb(161, 159, 159);
+  overflow: hidden;
+  background: rgb(234, 253, 251) url(/images/bg13.png);
+}
+
+.main .main-body .yingyin .nav-navgator{
+  width:200px;
+  height:45px;
+  background: rgb(102, 144, 160);
+  border-top-right-radius: 22px;
+  border-bottom-right-radius: 22px;
+  color:white;
+  font-size: 20px;
+  line-height: 45px;text-align: center;
+  margin-left:30px;
+  margin-top:10px;
+  box-shadow: 0 1px 6px 1px rgb(12, 11, 11);
+}
+footer{
+  height:100px;
+  width:100%;
+  line-height: 100px;
+  text-align: center;
+  margin-top:5px;
+}
+.main .main-body>.yingyin> form{
+  margin-top:30px;
+  margin-left:200px;
+  min-height: 400px;
+}
+.main .main-body>.yingyin >form button{
+  background: black;
+  color: rgb(252, 207, 153);
+}
+.main .main-body>.yingyin >form .info1,.main .main-body .yingyin >form .info2,.main .main-body>form .info3{
+  font-size: 12px;
+  color:rgb(151, 150, 150);
+  margin-top:5px;
+}
+
+.main .main-body .blog-content{
+  width:90%;
+  margin: 0 auto;
+  min-height: 600px;
+  border: 1px solid #ccc;
+  margin-top:20px;
+  margin-bottom: 20px;
+  padding:30px;
+}
+.main .main-body .blog-content dl{
+  width:100%;
+  padding:10px;
+  background: rgb(231, 237, 240);
+  border-radius: 10px;
+  overflow: hidden;
+  margin:10px auto;  
+box-shadow: 0 -1px 5px 3px rgb(196, 196, 194);  
+}
+.main .main-body .blog-content dl h4{
+  width:100%;
+  text-align: center;
+  font-size: 25px;
+}
+.main .main-body .blog-content dl dt{
+  width:200px;
+  height:200px;
+  float: left;
+}
+.main .main-body .blog-content dl dt img{width:100%;height:200px;}
+.main .main-body .blog-content dl dd{
+  float: left;
+  width:600px;
+  height:200px;
+  padding:20px;
+  margin-left:20px;
+  border-left:1px solid #ccc;
+}
+.main .main-body .blog-content dl dd>div{
+  width:100%;
+  height:130px;
+  line-height: 25px;
+  font-size: 16px;
+  display: -webkit-box;  
+  -webkit-line-clamp: 5;  
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+}
+.main .main-body .blog-content dl dd p:nth-child(2){
+  margin-top:10px;
+  color: #777;
+}
+.main .main-body .blog-content dl dd p:nth-child(2) a{margin-left:30px;}
+
+.gologin{
+  text-align: center;
+  font-size: 40px;
+  line-height: 100px;
+}

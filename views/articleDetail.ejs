@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <script src="bootstrap/js/jquery-1.10.1.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/lib/layer/layer.js"></script>
+    <script src="/lib/qqFace/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/lib/qqFace/js/jquery.qqFace.js"></script>
+    
+    <link rel="stylesheet" href="/lib/layer/theme/default/layer.css">
+    <link rel="stylesheet" href="/stylesheets/articleDetail.css">
+    <title><%- result[0].title%></title>
+</head>
+<body>
+        <header>
+            <div class="jumbotron head">
+                    <h1>Blog Administration</h1>
+                    <ul class="nav nav-pills">
+                        <li role="presentation" ><a href="/">首页</a></li>
+                        <li role="presentation" ><a href="/writeBlog">写博文</a></li>
+                        <li role="presentation" class="active"><a href="/blogManage">博文管理</a></li>
+                        <div class="row">
+                                <div class="col-xs-3">
+                                    <%if(username){%>
+                                        <span>欢迎你：<b><%= username%></b></span>
+                                        <a href="/layout" class="btn btn-default">退出</a>
+                                    <%}else{%>
+                                        <a href="/login" class="btn btn-default">登录</a>
+                                        <a href="/register" class="btn btn-default">注册</a>
+                                    <%}%>
+                                    
+                                </div>
+                        </div>
+                    </ul>
+            </div>
+        </header>
+        <div class="main">
+            <div class="main-body">
+                 <div class="yingyin">
+                    <div class="detail" data-id="<%= result[0].id%>">
+                        <h3 class="h2"><%- result[0].title %></h3>
+                        <div class="arti-content">
+                            <p>
+                                <span>作者：<%- result[0].author%></span>
+                                <span>发布时间：<%- result[0].data%></span>
+                            </p>
+                            <div>
+                                <%- result[0].content%>
+                            </div>
+                        </div>
+                        <div class="comment1">
+                            <!-- <form >
+                                <textarea name="comment" id="comment" cols="30" rows="10"></textarea>
+                                <button class="">暢言一下</button>
+                            </form> -->
+                            
+                            <div class="comment"> 
+                                <div class="com_form"> 
+                                    <textarea class="input" id="saytext" name="saytext" placeholder="说点什么吧。。。"></textarea> 
+                                    <p><span class="emotion"></span><input type="button" class="sub_btn" value="暢言一下"></p> 
+                                </div> 
+                            </div>
+                            <div id="show">
+                                <!-- <div class="commentlist">
+                                    <p><span>用户名：</span><span>评论时间</span></p>
+                                    <div class="commentshow">
+                                        狗腿速度快就分工会仍发多少就给你倒计时季后赛得分ID是
+                                    </div>
+                                    <div class="pingjia"><a href="##"><span></span><i>14</i></a><a href="##"><span></span><i>14</i></a></div>
+                                </div> -->
+                                
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%- include("footer")%>    
+            
+    </body>
+</html>
+<script>
+$(function(){
+    var img=$(".arti-content img");
+    for(var i=0;i<img.length;i++){
+        if(img.eq(i).width()>=700){
+            img.eq(i).css("width","650px");
+        }
+        if(img.eq(i).height()>=700){
+            img.eq(i).css("height","650px");
+        }
+    }
+})
+
+$(function(){ 
+    $('.emotion').qqFace({ 
+        assign:'saytext', //给输入框赋值 
+        path:'/lib/qqFace/arclist/'    //表情图片存放的路径 
+    }); 
+});
+$(function(){ 
+    var ids=$(".detail").attr("data-id");
+    $(".sub_btn").click(function(){ 
+        var str = $("#saytext").val(); 
+        var comment=replace_em(str);
+        // $("#show p").html(replace_em(str)); 
+        //post参数 URL data，回调函数
+        if(str){
+             $.post("/users/articleCommentInsert",{"comment":comment,"id":ids},(data)=>{
+                console.log(data);
+                if(data=="0"){
+                    layer.alert("请先登录！",{icon:5})
+                    setTimeout(function(){
+                       window.location.href="/login"
+                    },1000)
+                }else if(data=="1"){
+                    layer.alert("评论成功！",{icon:1});
+                    // setTimeout(function(){
+                    //     window.location.href="/articleDetail";
+                    // },1000)
+                    
+                }else{
+                    alert("评论失败",{icon:5});
+                }
+            })
+        }else{
+            layer.msg("评论内容为空！",{icon:2});
+        }
+    }); 
+
+    //显示评论
+    var timer=null;
+    autoshowComment();
+
+    //自动去请求后台数据库
+    function autoshowComment(){
+        clearInterval(timer);
+        timer=setInterval(function(){
+            $.get("/users/showComment",{"id":ids},function(data){
+                // console.log(data)
+                var str="";
+                for(var i=0;i<data.length;i++){
+                    str+='<div class="commentlist" data-idc=" '+data[i].idc+'" data-id="'+data[i].id+'">'+
+                            '<p><span>'+data[i].username+'</span><span>'+data[i].data+'</span></p>'+
+                            '<div class="commentshow">'+data[i].comment+
+                            '</div>'+
+                            '<div class="pingjia"><a href="##" id="jia"><span></span><i>'+data[i].countjia+'</i></a>'+
+                                '<a href="##" id="jian"><span></span><i>'+data[i].countjian+'</i></a></div>'+
+                        '</div>'
+                }
+                $("#show").html(str);
+                // clearInterval(timer);
+            })
+        },1000)
+    }
+}); 
+ function replace_em(str){
+        str = str.replace(/\</g,'&lt;');
+        str = str.replace(/\>/g,'&gt;');
+        str = str.replace(/\n/g,'<br/>');
+        str = str.replace(/\[em_([0-9]*)\]/g,'<img src="/lib/qqFace/arclist/$1.gif" border="0" />');
+        return str;
+    }      
+
+
+    var show=$("#show");
+    var countjia=0;
+    var countjian=0;
+    console.log(show);
+    
+
+        
+
+    show.on("click","#jia",function(){
+        var countjia=$(this).find("i").html();
+        var id=$(this).parent().parent().attr("data-id");
+        console.log(id)
+        ++countjia;
+        $(this).find("i").html(countjia);
+        console.log(countjia)
+        $.get("/users/countupdate",{"id":id,countjia:countjia},function(data){
+            console.log(data)
+        })
+    })
+    show.on("click","#jian",function(){
+        var countjian=$(this).find("i").html();
+        var id=$(this).parent().parent().attr("data-id");
+        ++countjian;
+        $(this).find("i").html(countjian);
+        $.get("/users/countupdate",{"id":id,countjian:countjian},function(data){
+            console.log(data)
+        })
+    })
+
+
+
+</script>
